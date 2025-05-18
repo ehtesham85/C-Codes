@@ -1,0 +1,113 @@
+#include<iostream>
+using namespace std;
+
+class Employee {
+public:
+    string name;
+    int id;
+    double baseSalary;
+
+    Employee() {
+        name = "";
+        id = 0;
+        baseSalary = 0;
+    }
+
+    virtual void displayDetails() {
+        cout << "Name: " << name << endl;
+        cout << "ID: " << id << endl;
+        cout << "Base Salary: " << baseSalary << endl;
+    }
+
+    virtual ~Employee() {}
+};
+
+class Manager : public Employee {
+public:
+    int teamSize;
+
+    void displayDetails() override {
+        Employee::displayDetails();
+        cout << "Team Size: " << teamSize << endl;
+        cout << "Bonus: " << calculateBonus() << endl;
+    }
+
+    double calculateBonus() {
+        return baseSalary * 0.10 * teamSize;
+    }
+};
+
+class Engineer : public Employee {
+public:
+    string specialization;
+
+    void displayDetails() override {
+        Employee::displayDetails();
+        cout << "Specialization: " << specialization << endl;
+        cout << "Incentive: " << calculateIncentive() << endl;
+    }
+
+    double calculateIncentive() {
+        if (specialization == "AI") {
+            return baseSalary * 0.15;
+        }
+        return 0.0;
+    }
+};
+
+class Intern : public Employee {
+public:
+    int duration;
+
+    void displayDetails() override {
+        Employee::displayDetails();
+        cout << "Duration (months): " << duration << endl;
+        cout << "Stipend: " << calculateStipend() << endl;
+    }
+
+    double calculateStipend() {
+        return duration * 5000;
+    }
+};
+
+int main() {
+    // Base class pointer array
+    Employee* employees[3];
+
+    // Manager
+    Manager* m = new Manager();
+    m->name = "Alice";
+    m->id = 101;
+    m->baseSalary = 80000;
+    m->teamSize = 5;
+    employees[0] = m;
+
+    // Engineer
+    Engineer* e = new Engineer();
+    e->name = "Bob";
+    e->id = 102;
+    e->baseSalary = 70000;
+    e->specialization = "AI";
+    employees[1] = e;
+
+    // Intern
+    Intern* i = new Intern();
+    i->name = "Charlie";
+    i->id = 103;
+    i->baseSalary = 20000;
+    i->duration = 3;
+    employees[2] = i;
+
+    // Display all employees
+    for (int j = 0; j < 3; j++) {
+        cout << "\n--- Employee " << j + 1 << " Details ---\n";
+        employees[j]->displayDetails();
+    }
+
+    // Clean up
+    for (int j = 0; j < 3; j++) {
+        delete employees[j];
+    }
+
+    return 0;
+}
